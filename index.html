@@ -13321,7 +13321,48 @@ function showPage(n) {
 }
 populateModels();
 renderTable();
+
+  <script>
+const secretPIN = "1234";   // अपना PIN डालें
+let accessGranted = false;  // शुरुआत में एक्सेस नहीं
+
+// Page load पर PIN चेक
+window.addEventListener("load", () => {
+
+    let saved = localStorage.getItem("accessGranted");
+
+    if (saved === "yes") {
+        accessGranted = true;
+        showPage(1);
+    } else {
+        let pin = prompt("Enter Access PIN to open Page 1:");
+
+        if (pin === secretPIN) {
+            accessGranted = true;
+            localStorage.setItem("accessGranted", "yes");
+            showPage(1);
+        } else {
+            accessGranted = false;
+            showPage(2);
+        }
+    }
+});
+
+// 🔥 IMPORTANT: यह नया showPage() पुराना वाला replace करेगा
+window.showPage = function(n) {
+    if (n === 1 && !accessGranted) {
+        alert("❌ Access Denied! PIN required.");
+        return;  // Page 1 नहीं खुलेगा
+    }
+
+    document.getElementById('page1').classList.add('hidden');
+    document.getElementById('page2').classList.add('hidden');
+    document.getElementById('page'+n).classList.remove('hidden');
+};
 </script>
+
+</script>
+
 
 
 </body></html>
